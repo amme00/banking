@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% block head_title %}Customer List{% endblock %}
+
+{% block content %}
+<div class="lg:flex">
+    <!-- Sidebar -->
+    <div class="w-full lg:w-1/5 bg-gray-200 p-5 rounded-l-lg">
+        <h2 class="font-bold text-xl mb-4 text-gray-800">Manager Menu</h2>
+        <nav>
+            <ul>
+                <!-- ... (other links) ... -->
+                <li class="mb-2"><a href="{% url 'manager:pending_loans' %}" class="text-gray-700 hover:text-teal-800">Pending Loans</a></li>
+                <li class="mb-2"><a href="{% url 'manager:customer_list' %}" class="font-bold text-teal-600 hover:text-teal-800">Customer List</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-full lg:w-4/5 p-8 bg-white rounded-r-lg">
+        <h1 class="font-mono font-bold text-3xl text-gray-800 pb-5">Customer List</h1>
+        <hr />
+        <table class="table-auto mx-auto w-full mt-8">
+            <thead class="bg-gray-800 text-white">
+            <tr class="uppercase font-semibold text-sm">
+                <th class="px-4 py-2">Full Name</th>
+                <th class="px-4 py-2">Email</th>
+                <th class="px-4 py-2">Account No</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for customer in customers %}
+            <tr class="{% cycle 'bg-gray-300' 'bg-white-100' %}">
+                <td class="border px-4 py-2">{{ customer.user.first_name }} {{ customer.user.last_name }}</td>
+                <td class="border px-4 py-2">{{ customer.user.email }}</td>
+                <td class="border px-4 py-2 text-center">{{ customer.account_no }}</td>
+                <td class="border px-4 py-2 text-center">{{ customer.get_status_display }}</td>
+                <td class="border px-4 py-2 text-center">
+                    <a href="{% url 'manager:customer_detail' pk=customer.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

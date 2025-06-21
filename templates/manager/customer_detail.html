@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% block head_title %}Customer Detail{% endblock %}
+
+{% block content %}
+<div class="lg:flex">
+    <!-- Sidebar -->
+    <div class="w-full lg:w-1/5 bg-gray-200 p-5 rounded-l-lg">
+         <h2 class="font-bold text-xl mb-4 text-gray-800">Manager Menu</h2>
+        <nav>
+            <ul>
+                <!-- ... (other links) ... -->
+                <li class="mb-2"><a href="{% url 'manager:pending_loans' %}" class="text-gray-700 hover:text-teal-800">Pending Loans</a></li>
+                <li class="mb-2"><a href="{% url 'manager:customer_list' %}" class="font-bold text-teal-600 hover:text-teal-800">Customer List</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-full lg:w-4/5 p-8 bg-white rounded-r-lg">
+        <a href="{% url 'manager:customer_list' %}" class="text-blue-500 hover:text-blue-800 mb-4 inline-block">← Back to Customer List</a>
+        <h1 class="font-mono font-bold text-3xl text-gray-800 pb-5">Customer: {{ customer.user.first_name }} {{ customer.user.last_name }}</h1>
+        <hr />
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <!-- Customer Info -->
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <h3 class="font-bold text-lg mb-2">Account Information</h3>
+                <p><strong>Email:</strong> {{ customer.user.email }}</p>
+                <p><strong>Account No:</strong> {{ customer.account_no }}</p>
+                <p><strong>Account Type:</strong> {{ customer.account_type.name }}</p>
+                <p><strong>Current Balance:</strong> $ {{ customer.balance }}</p>
+                <p><strong>Status:</strong> <span class="font-bold {% if customer.status == 'active' %}text-green-600{% elif customer.status == 'frozen' %}text-red-600{% else %}text-yellow-600{% endif %}">{{ customer.get_status_display }}</span></p>
+            </div>
+            <!-- Address Info -->
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <h3 class="font-bold text-lg mb-2">Address</h3>
+                <p>{{ customer.user.address.street_address }}</p>
+                <p>{{ customer.user.address.city }}, {{ customer.user.address.postal_code }}</p>
+                <p>{{ customer.user.address.country }}</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-8">
+            <h3 class="font-bold text-lg mb-2">Actions</h3>
+            <div class="flex space-x-4">
+                <!-- Freeze/Unfreeze Button -->
+                <form action="{% url 'manager:freeze_account' pk=customer.pk %}" method="post">
+                    {% csrf_token %}
+                    {% if customer.status == 'frozen' %}
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Unfreeze Account</button>
+                    {% else %}
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Freeze Account</button>
+                    {% endif %}
+                </form>
+                <!-- View Transactions Button -->
+                <a href="{% url 'manager:customer_report' %}?customer_id={{ customer.pk }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">View Transactions</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

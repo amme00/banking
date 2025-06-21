@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% block head_title %}Pending Loan Requests{% endblock %}
+
+{% block content %}
+<div class="lg:flex">
+    <!-- Sidebar -->
+    <div class="w-full lg:w-1/5 bg-gray-200 p-5 rounded-l-lg">
+        <h2 class="font-bold text-xl mb-4 text-gray-800">Manager Menu</h2>
+        <nav>
+            <ul>
+                <li class="mb-2">
+                    <a href="{% url 'manager:dashboard' %}" class="text-gray-700 hover:text-teal-800">Dashboard</a>
+                </li>
+                <li class="mb-2">
+                    <a href="{% url 'manager:pending_accounts' %}" class="text-gray-700 hover:text-teal-800">Pending Accounts</a>
+                </li>
+                <li class="mb-2">
+                    <a href="{% url 'manager:pending_loans' %}" class="font-bold text-teal-600 hover:text-teal-800">Pending Loans</a>
+                </li>
+                <!-- add5 -->
+                <li class="mb-2">
+            <a href="{% url 'manager:customer_list' %}" class="text-gray-700 hover:text-teal-800">Customer List</a>
+        </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="w-full lg:w-4/5 p-8 bg-white rounded-r-lg">
+        <h1 class="font-mono font-bold text-3xl text-gray-800 pb-5">Pending Loan Requests</h1>
+        <hr />
+        {% if not loans %}
+            <p class="text-center mt-8">There are no pending loan requests.</p>
+        {% else %}
+            <table class="table-auto mx-auto w-full mt-8">
+                <thead class="bg-gray-800 text-white">
+                <tr class="uppercase font-semibold text-sm">
+                    <th class="px-4 py-2">User</th>
+                    <th class="px-4 py-2">Amount</th>
+                    <th class="px-4 py-2">Date</th>
+                    <th class="px-4 py-2">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for loan in loans %}
+                <tr class="{% cycle 'bg-gray-300' 'bg-white-100' %}">
+                    <td class="border px-4 py-2">{{ loan.user_account.user.email }}</td>
+                    <td class="border px-4 py-2 text-center">$ {{ loan.amount }}</td>
+                    <td class="border px-4 py-2 text-center">{{ loan.application_date|date:"Y-m-d" }}</td>
+                    <td class="border px-4 py-2 text-center">
+                        <form action="{% url 'manager:approve_loan' pk=loan.pk %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-xs">Approve</button>
+                        </form>
+                        <form action="{% url 'manager:deny_loan' pk=loan.pk %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs ml-2">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endblock %}

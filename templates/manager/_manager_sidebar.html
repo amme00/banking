@@ -1,0 +1,22 @@
+      
+<div class="w-full lg:w-1/5 bg-gray-200 p-5 rounded-l-lg">
+    <h2 class="font-bold text-xl mb-4 text-gray-800">Manager Menu</h2>
+    <nav>
+        <ul>
+            <li class="mb-2">
+                <a href="{% url 'manager:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}font-bold text-teal-600{% else %}text-gray-700{% endif %} hover:text-teal-800">Dashboard</a>
+            </li>
+            <li class="mb-2">
+                <a href="{% url 'manager:pending_accounts' %}" class="{% if request.resolver_match.url_name == 'pending_accounts' %}font-bold text-teal-600{% else %}text-gray-700{% endif %} hover:text-teal-800">Pending Accounts</a>
+            </li>
+            <li class="mb-2">
+                <a href="{% url 'manager:pending_loans' %}" class="{% if request.resolver_match.url_name == 'pending_loans' %}font-bold text-teal-600{% else %}text-gray-700{% endif %} hover:text-teal-800">Pending Loans</a>
+            </li>
+            <li class="mb-2">
+                <a href="{% url 'manager:customer_list' %}" class="{% if request.resolver_match.url_name == 'customer_list' or request.resolver_match.url_name == 'customer_detail' %}font-bold text-teal-600{% else %}text-gray-700{% endif %} hover:text-teal-800">Customer List</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+    

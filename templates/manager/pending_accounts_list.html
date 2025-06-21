@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+{% block head_title %}Pending Accounts{% endblock %}
+
+{% block content %}
+<div class="lg:flex">
+    <!-- Include the consistent sidebar -->
+    {% include 'manager/_manager_sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="w-full lg:w-4/5 p-8 bg-white rounded-r-lg">
+        <h1 class="font-mono font-bold text-3xl text-gray-800 pb-5">Pending Account Requests</h1>
+        <hr />
+
+        {% if not accounts %}
+            <div class="mt-8 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                <p class="font-bold">No Pending Requests</p>
+                <p>There are currently no new account registration requests to review.</p>
+            </div>
+        {% else %}
+            <table class="table-auto mx-auto w-full mt-8">
+                <thead class="bg-gray-800 text-white">
+                <tr class="uppercase font-semibold text-sm">
+                    <th class="px-4 py-2">Account No.</th>
+                    <th class="px-4 py-2">Full Name</th>
+                    <th class="px-4 py-2">Email</th>
+                    <th class="px-4 py-2">Account Type</th>
+                    <th class="px-4 py-2">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for account in accounts %}
+                <tr class="{% cycle 'bg-gray-300' 'bg-white-100' %}">
+                    <td class="border px-4 py-2 text-center">{{ account.account_no }}</td>
+                    <td class="border px-4 py-2 text-center">{{ account.user.first_name }} {{ account.user.last_name }}</td>
+                    <td class="border px-4 py-2 text-center">{{ account.user.email }}</td>
+                    <td class="border px-4 py-2 text-center">{{ account.account_type.name }}</td>
+                    <td class="border px-4 py-2 text-center">
+                        <!-- SECURE POST-based forms -->
+                        <form action="{% url 'manager:approve_account' pk=account.pk %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-xs">Approve</button>
+                        </form>
+                        <form action="{% url 'manager:deny_account' pk=account.pk %}" method="post" class="inline ml-2">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

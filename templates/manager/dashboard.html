@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+{% load humanize %} <!-- Load humanize for number formatting -->
+
+{% block head_title %}Manager Dashboard{% endblock %}
+
+{% block content %}
+<div class="lg:flex">
+    <!-- Include the consistent sidebar -->
+    {% include 'manager/_manager_sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="w-full lg:w-4/5 p-8 bg-white rounded-r-lg">
+        <h1 class="font-mono font-bold text-3xl text-gray-800 pb-2">Manager Dashboard</h1>
+        <p class="text-lg text-gray-600 mb-6">Welcome, {{ user.email }}. Here's an overview of the bank's current status.</p>
+        <hr />
+
+        <!-- Stat Cards Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+            <!-- Total Customers Card -->
+            <div class="bg-blue-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-blue-800">Total Customers</h3>
+                <p class="text-3xl font-bold text-blue-900 mt-2">{{ total_customers }}</p>
+            </div>
+
+            <!-- Total Assets Card -->
+            <div class="bg-green-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-green-800">Total Bank Assets</h3>
+                <p class="text-3xl font-bold text-green-900 mt-2">${{ total_assets|floatformat:2|intcomma }}</p>
+            </div>
+
+            <!-- Pending Accounts Card -->
+            <a href="{% url 'manager:pending_accounts' %}" class="block bg-yellow-100 p-6 rounded-lg shadow-md hover:bg-yellow-200 transition">
+                <h3 class="text-lg font-semibold text-yellow-800">Pending Accounts</h3>
+                <p class="text-3xl font-bold text-yellow-900 mt-2">{{ pending_accounts_count }}</p>
+                {% if pending_accounts_count > 0 %}
+                    <span class="text-sm text-yellow-700">Action Required</span>
+                {% endif %}
+            </a>
+
+            <!-- Pending Loans Card -->
+            <a href="{% url 'manager:pending_loans' %}" class="block bg-red-100 p-6 rounded-lg shadow-md hover:bg-red-200 transition">
+                <h3 class="text-lg font-semibold text-red-800">Pending Loans</h3>
+                <p class="text-3xl font-bold text-red-900 mt-2">{{ pending_loans_count }}</p>
+                {% if pending_loans_count > 0 %}
+                    <span class="text-sm text-red-700">Action Required</span>
+                {% endif %}
+            </a>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+            <!-- Recently Joined Customers -->
+            <div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Recently Joined Customers</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
+                    {% if not recent_customers %}
+                        <p class="text-gray-500">No new customers recently.</p>
+                    {% else %}
+                        <ul>
+                            {% for customer in recent_customers %}
+                                <li class="border-b border-gray-200 py-2">
+                                    <p class="font-semibold text-gray-800">{{ customer.first_name }} {{ customer.last_name }}</p>
+                                    <p class="text-sm text-gray-600">{{ customer.email }} - Joined: {{ customer.date_joined|date:"M d, Y" }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent High-Value Transactions -->
+            <div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Recent High-Value Transactions ( > $1,000 )</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
+                    {% if not recent_transactions %}
+                        <p class="text-gray-500">No recent high-value transactions.</p>
+                    {% else %}
+                        <ul>
+                            {% for tx in recent_transactions %}
+                                <li class="border-b border-gray-200 py-2">
+                                    <div class="flex justify-between">
+                                        <p class="font-semibold {% if tx.get_transaction_type_display == 'Deposit' %}text-green-600{% else %}text-red-600{% endif %}">
+                                            {{ tx.get_transaction_type_display }}: ${{ tx.amount|intcomma }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">Acct: {{ tx.account.account_no }}</p>
+                                    </div>
+                                    <p class="text-sm text-gray-500">{{ tx.timestamp|date:"M d, Y, P" }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
