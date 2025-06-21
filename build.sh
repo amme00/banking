@@ -8,4 +8,4 @@ python manage.py migrate
 
 echo "creating superuser"
 
-pyhon manage.py createsuperuser --noinput || true
+python manage.py createsuperuser --noinput || true
