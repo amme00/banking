@@ -45,7 +45,8 @@
                 {% for loan in loans %}
                 <tr class="{% cycle 'bg-gray-300' 'bg-white-100' %}">
                     <td class="border px-4 py-2">{{ loan.user_account.user.email }}</td>
-                    <td class="border px-4 py-2 text-center">$ {{ loan.amount }}</td>
+                    <td class="border px-4 py-2 text-center">{{ loan.amount|floatformat:0|intcomma }} FCFA</td>
+    
                     <td class="border px-4 py-2 text-center">{{ loan.application_date|date:"Y-m-d" }}</td>
                     <td class="border px-4 py-2 text-center">
                         <form action="{% url 'manager:approve_loan' pk=loan.pk %}" method="post" class="inline">

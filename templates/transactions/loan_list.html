@@ -19,7 +19,7 @@
         <tbody>
         {% for loan in loans %}
         <tr class="{% cycle 'bg-gray-300' 'bg-white-100' %}">
-            <td class="border px-4 py-2 text-center">$ {{ loan.amount }}</td>
+            <td class="border px-4 py-2 text-center">{{ loan.amount|floatformat:0|intcomma }} FCFA</td>
             <td class="border px-4 py-2 text-center">{{ loan.get_status_display }}</td>
             <td class="border px-4 py-2 text-center">{{ loan.application_date }}</td>
             <td class="border px-4 py-2 text-center">{{ loan.approval_date|default:"N/A" }}</td>

@@ -28,7 +28,9 @@
                 <p><strong>Email:</strong> {{ customer.user.email }}</p>
                 <p><strong>Account No:</strong> {{ customer.account_no }}</p>
                 <p><strong>Account Type:</strong> {{ customer.account_type.name }}</p>
-                <p><strong>Current Balance:</strong> $ {{ customer.balance }}</p>
+            
+                <p><strong>Current Balance:</strong> {{ customer.balance|floatformat:0|intcomma }} FCFA</p>
+
                 <p><strong>Status:</strong> <span class="font-bold {% if customer.status == 'active' %}text-green-600{% elif customer.status == 'frozen' %}text-red-600{% else %}text-yellow-600{% endif %}">{{ customer.get_status_display }}</span></p>
             </div>
             <!-- Address Info -->

@@ -138,7 +138,7 @@ class DepositMoneyView(TransactionCreateMixin):
 
         messages.success(
             self.request,
-            f'{amount}$ was deposited to your account successfully'
+            f'{amount} FCFA was deposited to your account successfully'
         )
 
         return super().form_valid(form)
@@ -160,7 +160,8 @@ class WithdrawMoneyView(TransactionCreateMixin):
 
         messages.success(
             self.request,
-            f'Successfully withdrawn {amount}$ from your account'
+
+             f'Successfully withdrawn {amount} FCFA from your account'
         )
 
         return super().form_valid(form)
@@ -210,7 +211,7 @@ class FundTransferView(TransactionCreateMixin):
 
         messages.success(
             self.request,
-            f'Successfully transferred {amount}$ to account #{to_account_no}.'
+            f'Successfully transferred {amount} FCFA to account #{to_account_no}.'
         )
         return super().form_valid(form)
     

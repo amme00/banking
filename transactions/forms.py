@@ -38,8 +38,9 @@ class DepositForm(TransactionForm):
         amount = self.cleaned_data.get('amount')
 
         if amount < min_deposit_amount:
+
             raise forms.ValidationError(
-                f'You need to deposit at least {min_deposit_amount} $'
+                f'You need to deposit at least {min_deposit_amount} FCFA'
             )
 
         return amount
@@ -72,7 +73,7 @@ class FundTransferForm(TransactionForm):
         if self.account.balance < amount:
             raise forms.ValidationError(
                 f'You do not have enough balance to make this transfer. '
-                f'Your current balance is {self.account.balance} $.'
+                f'Your current balance is {self.account.balance} FCFA.'
             )
         return amount
 
@@ -90,17 +91,17 @@ class WithdrawForm(TransactionForm):
 
         if amount < min_withdraw_amount:
             raise forms.ValidationError(
-                f'You can withdraw at least {min_withdraw_amount} $'
+                f'You can withdraw at least {min_withdraw_amount} FCFA'
             )
 
         if amount > max_withdraw_amount:
             raise forms.ValidationError(
-                f'You can withdraw at most {max_withdraw_amount} $'
+                f'You can withdraw at most {max_withdraw_amount} FCFA'
             )
 
         if amount > balance:
             raise forms.ValidationError(
-                f'You have {balance} $ in your account. '
+                f'You have {balance} FCFA in your account. '
                 'You can not withdraw more than your account balance'
             )
 
