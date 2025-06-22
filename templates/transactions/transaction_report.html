@@ -1,3 +1,4 @@
+{% load humanize %}
 {% extends 'core/base.html' %}
 
 {% block head_title %}Transaction Report{% endblock %}
@@ -50,7 +51,7 @@
         <tr class="bg-gray-600 text-white">
             <th class="px-4 py-2 text-right" colspan="3">Final Balance</th>
             <th class="px-4 py-2 text-center">$ {{ account.balance }}</th>
-                  
+
             <th class="px-4 py-2 text-center">{{ account.balance|floatformat:0|intcomma }} FCFA</th>
 
     
